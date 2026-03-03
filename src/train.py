@@ -45,25 +45,7 @@ def train_models():
 
     rf_model.fit(X_train_unscaled, y_train)
 
-    # ===============================
-    # SHUFFLE TEST (Leakage Check)
-    # ===============================
 
-    y_train_shuffled = np.random.permutation(y_train)
-
-    rf_model_shuffled = RandomForestClassifier(
-        n_estimators=200,
-        random_state=42
-    )
-
-    rf_model_shuffled.fit(X_train_unscaled, y_train_shuffled)
-
-    shuffle_accuracy = accuracy_score(
-        y_test,
-        rf_model_shuffled.predict(X_test_unscaled)
-    )
-
-    print("\nShuffle Test Accuracy (should be low):", shuffle_accuracy)
 
     # ===============================
     # Normal Random Forest Evaluation

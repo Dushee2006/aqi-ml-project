@@ -29,13 +29,21 @@ def load_and_preprocess(filepath="data/aqi_data.csv"):
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    # Balance training data using SMOTE
+    # Apply SMOTE only to training data
     smote = SMOTE(random_state=42)
     X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
 
-    # Scale features (important for Logistic Regression)
+    # Scaling for Logistic Regression
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train_resampled)
     X_test_scaled = scaler.transform(X_test)
 
-    return X_train_scaled, X_test_scaled, y_train_resampled, y_test, scaler
+    return (
+        X_train_resampled,   # Unscaled training (for Random Forest)
+        X_test,              # Unscaled test
+        X_train_scaled,      # Scaled training (for Logistic)
+        X_test_scaled,       # Scaled test
+        y_train_resampled,
+        y_test,
+        scaler
+    )

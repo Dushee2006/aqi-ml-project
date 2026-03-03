@@ -3,9 +3,15 @@ import pandas as pd
 from datetime import datetime, timedelta
 import time
 import os
+from dotenv import load_dotenv
 
-# 🔴 REPLACE WITH YOUR REAL API KEY
-API_KEY = "2283a1787b937dd569ea23e00bfa72a9"
+
+load_dotenv()
+
+API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
+if API_KEY is None:
+    raise ValueError("OPENWEATHER_API_KEY not found in environment variables.")
 
 LAT = 6.9271
 LON = 79.8612

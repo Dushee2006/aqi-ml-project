@@ -47,6 +47,13 @@ Streamlit App:
 ---
 
 ## 📈 Model Comparison
+---
+
+## 🌲 Random Forest Feature Importance
+
+![Feature Importance](reports/feature_importance_rf.png)
+
+Random Forest identifies PM2.5, PM10 and O3 as dominant contributors to AQI classification.
 
 ### Accuracy Comparison
 

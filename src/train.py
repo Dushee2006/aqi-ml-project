@@ -41,7 +41,7 @@ def train_models():
         n_estimators=200,
         random_state=42,
         class_weight="balanced"
-    )
+    ) 
 
     rf_model.fit(X_train_unscaled, y_train)
 

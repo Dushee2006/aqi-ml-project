@@ -1,50 +1,129 @@
-# AQI Prediction Web App (Machine Learning)
+# 🌍 AQI Classification ML Project
 
-## Overview
-This project predicts Air Quality Index (AQI) levels using machine learning models trained on historical air pollution data.
+A machine learning project that predicts Air Quality Index (AQI) levels using pollutant measurements and time-based features.
 
-The application is deployed using Streamlit Cloud and allows users to input pollutant values to predict AQI category.
+---
 
-## Live Demo
-🔗 https://aqi-ml-project-wiqqndruisijceapaz5vpf.streamlit.app/
+## 🚀 Live App
 
-## Features
-- Historical data ingestion from OpenWeather API
-- Feature engineering (time-based features)
-- Dataset balancing using SMOTE
-- Logistic Regression and Random Forest models
-- Model evaluation with classification report and confusion matrix
-- Data leakage validation (shuffle test)
-- Model persistence using joblib
-- Deployed interactive web app using Streamlit
+Streamlit App:
+👉 https://aqi-ml-project-wiqqndruisijceapaz5vpf.streamlit.app/
 
-## Tech Stack
-- Python
-- Pandas
-- Scikit-learn
-- Imbalanced-learn (SMOTE)
-- Streamlit
-- Git & GitHub
-- Streamlit Cloud Deployment
+---
 
-## Project Structure
+## 📊 Dataset
+
+- Historical AQI data from OpenWeather API
+- 2760 records
+- Features:
+  - pm2_5
+  - pm10
+  - co
+  - no2
+  - o3
+  - so2
+  - hour
+  - day
+  - month
+  - day_of_week
+- Target: AQI (Classes 1–4)
+
+---
+
+## ⚙️ Preprocessing
+
+- Extracted time features from timestamp
+- Train-Test Split (80/20)
+- SMOTE applied to balance training classes
+- StandardScaler applied for Logistic Regression
+
+---
+
+## 🤖 Models Trained
+
+1. Logistic Regression
+2. Random Forest Classifier
+
+---
+
+## 📈 Model Comparison
+
+### Accuracy Comparison
+
+![Accuracy](reports/accuracy_comparison.png)
+
+### Macro F1 Score Comparison
+
+![F1 Score](reports/f1_comparison.png)
+
+---
+
+## 🔎 Confusion Matrices
+
+### Logistic Regression
+
+![Confusion Logistic](reports/confusion_matrix_logistic.png)
+
+### Random Forest
+
+![Confusion RF](reports/confusion_matrix_rf.png)
+
+---
+
+## 📊 Class Distribution
+
+### Original Dataset
+
+![Original Distribution](reports/original_class_distribution.png)
+
+### Balanced Training Data (SMOTE)
+
+![Balanced Distribution](reports/balanced_training_distribution.png)
+
+---
+
+## 🏆 Final Model Selection
+
+Random Forest selected because:
+
+- Higher accuracy
+- Higher macro F1 score
+- Better per-class recall
+- Captures non-linear relationships
+
+---
+
+## 📁 Project Structure
+
 ```
-aqi-ml-project/
+aqi_ml_project/
 │
+├── data/
+├── models/
+├── reports/
+├── src/
 ├── app.py
 ├── requirements.txt
-├── models/
-│   ├── logistic_model.pkl
-│   ├── random_forest_model.pkl
-│   └── scaler.pkl
-├── src/
-│   ├── ingestion.py
-│   ├── preprocessing.py
-│   └── train.py
+└── README.md
 ```
 
-## Model Performance
-Random Forest achieved ~99.8% accuracy on test data.
+---
 
-## Author
-Dulasha Bhanuki Wickramarathna Siriwardhana
+## 🛠 Tech Stack
+
+- Python
+- Scikit-learn
+- Imbalanced-learn (SMOTE)
+- Pandas
+- Matplotlib
+- Seaborn
+- Streamlit
+
+---
+
+## 📌 Key Learnings
+
+- Handling imbalanced classification
+- Avoiding data leakage
+- Model comparison using macro metrics
+- Deploying ML models using Streamlit Cloud

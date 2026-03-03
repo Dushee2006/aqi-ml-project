@@ -1,5 +1,10 @@
 # 🌍 AQI Classification ML Project
 
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange)
+![Streamlit](https://img.shields.io/badge/Deployed-Streamlit-success)
+![Status](https://img.shields.io/badge/Status-Production-brightgreen)
+
 A machine learning project that predicts Air Quality Index (AQI) levels using pollutant measurements and time-based features.
 
 ---

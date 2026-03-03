@@ -1,41 +1,88 @@
 import joblib
+import numpy as np
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, accuracy_score
 
 from preprocessing import load_and_preprocess
 
 
-def train_model():
-    # Load preprocessed data
-    X_train, X_test, y_train, y_test, scaler = load_and_preprocess()
+def train_models():
+    (
+        X_train_unscaled,
+        X_test_unscaled,
+        X_train_scaled,
+        X_test_scaled,
+        y_train,
+        y_test,
+        scaler
+    ) = load_and_preprocess()
 
-    # Create Logistic Regression model
-    model = LogisticRegression(
-    max_iter=1000,
-    random_state=42
-)
+    print("\n==============================")
+    print("LOGISTIC REGRESSION")
+    print("==============================")
 
-    # Train model
-    model.fit(X_train, y_train)
+    log_model = LogisticRegression(
+        max_iter=1000,
+        random_state=42
+    )
 
-    # Predictions
-    y_pred = model.predict(X_test)
+    log_model.fit(X_train_scaled, y_train)
+    y_pred_log = log_model.predict(X_test_scaled)
 
-    # Evaluation
-    print("Accuracy:", accuracy_score(y_test, y_pred))
-    print("\nClassification Report:\n")
-    print(classification_report(y_test, y_pred))
-    print("\nConfusion Matrix:\n")
-    print(confusion_matrix(y_test, y_pred))
+    print("Accuracy:", accuracy_score(y_test, y_pred_log))
+    print(classification_report(y_test, y_pred_log))
 
-    return model, scaler
+    print("\n==============================")
+    print("RANDOM FOREST")
+    print("==============================")
+
+    rf_model = RandomForestClassifier(
+        n_estimators=200,
+        random_state=42,
+        class_weight="balanced"
+    )
+
+    rf_model.fit(X_train_unscaled, y_train)
+
+    # ===============================
+    # SHUFFLE TEST (Leakage Check)
+    # ===============================
+
+    y_train_shuffled = np.random.permutation(y_train)
+
+    rf_model_shuffled = RandomForestClassifier(
+        n_estimators=200,
+        random_state=42
+    )
+
+    rf_model_shuffled.fit(X_train_unscaled, y_train_shuffled)
+
+    shuffle_accuracy = accuracy_score(
+        y_test,
+        rf_model_shuffled.predict(X_test_unscaled)
+    )
+
+    print("\nShuffle Test Accuracy (should be low):", shuffle_accuracy)
+
+    # ===============================
+    # Normal Random Forest Evaluation
+    # ===============================
+
+    y_pred_rf = rf_model.predict(X_test_unscaled)
+
+    print("\nRandom Forest Accuracy:",
+          accuracy_score(y_test, y_pred_rf))
+    print(classification_report(y_test, y_pred_rf))
+
+    return log_model, rf_model, scaler
 
 
 if __name__ == "__main__":
-    model, scaler = train_model()
+    log_model, rf_model, scaler = train_models()
 
-    # Save model and scaler
-    joblib.dump(model, "models/logistic_model.pkl")
+    joblib.dump(log_model, "models/logistic_model.pkl")
+    joblib.dump(rf_model, "models/random_forest_model.pkl")
     joblib.dump(scaler, "models/scaler.pkl")
 
-    print("\nModel and scaler saved successfully.")
+    print("\nModels and scaler saved successfully.")

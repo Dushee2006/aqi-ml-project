@@ -1,29 +1,40 @@
-# 🌍 AQI Classification ML Project
+# AQI Classification ML Project
 
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange)
 ![Streamlit](https://img.shields.io/badge/Deployed-Streamlit-success)
 ![Status](https://img.shields.io/badge/Status-Production-brightgreen)
 
-A production-ready machine learning system that predicts Air Quality Index (AQI) levels using pollutant measurements and time-based features.
+A production-ready Machine Learning system that predicts Air Quality Index (AQI) levels using pollutant measurements and time-based features.
+
+This project demonstrates a complete ML workflow including data ingestion, preprocessing, model training, evaluation, and deployment.
 
 ---
 
-## 🚀 Live Application
+# Live Application
 
-🔗 **Streamlit Deployment:**  
+Streamlit App
+
 https://aqi-ml-project-wiqqndruisijceapaz5vpf.streamlit.app/
 
-This app allows users to input pollutant values and receive real-time AQI predictions using the trained Random Forest model.
+Users can input pollutant values and receive real-time AQI predictions using the trained Random Forest model.
 
 ---
 
-## 📊 Dataset
+# Dataset
 
-- Source: OpenWeather Historical AQI API
-- Total Records: 2,760
-- Location: Colombo (Sri Lanka)
-- Target Classes: AQI Levels 1–4
+Source: OpenWeather Historical AQI API  
+Location: Colombo, Sri Lanka  
+Total Records: 2760  
+
+Target variable: AQI class (1–4)
+
+| AQI | Air Quality |
+|----|-------------|
+| 1 | Good |
+| 2 | Fair |
+| 3 | Moderate |
+| 4 | Poor |
 
 ### Features Used
 
@@ -40,283 +51,171 @@ This app allows users to input pollutant values and receive real-time AQI predic
 
 ---
 
-## ⚙️ Data Preprocessing Pipeline
+# Data Preprocessing Pipeline
 
-✔ Timestamp feature extraction (hour, day, month, weekday)  
-✔ Train/Test split (80/20, stratified)  
-✔ SMOTE applied to balance training classes  
-✔ StandardScaler applied (for Logistic Regression only)  
-✔ Strict separation to prevent data leakage  
+The preprocessing pipeline was carefully designed to avoid data leakage and improve model performance.
 
----
+Steps included:
 
-## 🤖 Models Trained
-
-1. Logistic Regression (Linear Baseline)
-2. Random Forest Classifier (Final Selected Model)
-
----
-
-## 📈 Model Comparison
-
-### 📊 Performance Summary
-
-| Model                | Accuracy | Macro F1 Score |
-|----------------------|----------|----------------|
-| Logistic Regression  | 0.906    | 0.916          |
-| Random Forest        | 0.998    | 0.999          |
-
-Random Forest significantly outperformed Logistic Regression across all evaluation metrics and demonstrated superior class balance.
+1. Timestamp conversion to datetime
+2. Time-based feature extraction (hour, day, month, weekday)
+3. Train-test split (80/20 stratified)
+4. Missing value handling
+5. Outlier treatment using IQR clipping
+6. Handling class imbalance using SMOTE
+7. Feature scaling using StandardScaler (for Logistic Regression)
 
 ---
 
-## 🌲 Random Forest Feature Importance
+# Handling Class Imbalance
+
+The original dataset contained class imbalance.
+
+SMOTE was applied only to the training data to avoid data leakage.
+
+Original Dataset Distribution
+
+![Original Distribution](reports/original_class_distribution.png)
+
+Balanced Training Data
+
+![Balanced Distribution](reports/balanced_training_distribution.png)
+
+---
+
+# Models Trained
+
+Two models were implemented and compared.
+
+Logistic Regression  
+A baseline linear classification model.
+
+Random Forest Classifier  
+An ensemble tree-based model capable of learning complex non-linear relationships.
+
+---
+
+# Model Evaluation
+
+The following evaluation metrics were used:
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- Macro F1 Score
+- Confusion Matrix
+
+---
+
+# Model Performance Comparison
+
+| Model | Accuracy | Macro F1 Score |
+|------|---------|----------------|
+| Logistic Regression | 0.906 | 0.916 |
+| Random Forest | 0.998 | 0.999 |
+
+Random Forest clearly outperformed Logistic Regression across all evaluation metrics.
+
+---
+
+# Accuracy Comparison
+
+![Accuracy Comparison](reports/accuracy_comparison.png)
+
+---
+
+# Macro F1 Score Comparison
+
+![F1 Comparison](reports/f1_comparison.png)
+
+---
+
+# Confusion Matrices
+
+Logistic Regression
+
+![Confusion Matrix Logistic](reports/confusion_matrix_logistic.png)
+
+Random Forest
+
+![Confusion Matrix Random Forest](reports/confusion_matrix_rf.png)
+
+---
+
+# Random Forest Feature Importance
 
 ![Feature Importance](reports/feature_importance_rf.png)
 
-Top contributing pollutants:
+The most influential pollutants in AQI prediction were:
+
 - PM2.5
 - PM10
 - O3
 
 ---
 
-## 📊 Accuracy Comparison
+# Data Leakage Prevention
 
-![Accuracy](reports/accuracy_comparison.png)
+Several steps were taken to ensure a reliable evaluation:
 
----
-
-## 📊 Macro F1 Score Comparison
-
-![F1 Score](reports/f1_comparison.png)
-
----
-
-## 🔎 Confusion Matrices
-
-### Logistic Regression
-
-![Confusion Logistic](reports/confusion_matrix_logistic.png)
-
-### Random Forest
-
-![Confusion RF](reports/confusion_matrix_rf.png)
-
----
-
-## 📊 Class Distribution Analysis
-
-### Original Dataset (Imbalanced)
-
-![Original Distribution](reports/original_class_distribution.png)
-
-### Balanced Training Data (After SMOTE)
-
-![Balanced Distribution](reports/balanced_training_distribution.png)
-
----
-
-## 🏆 Final Model Selection Rationale
-
-Random Forest was selected as the production model because:
-
-- Higher overall accuracy
-- Higher macro F1 score (balanced performance across classes)
-- Better minority class recall
-- Ability to model non-linear pollutant interactions
-- Strong generalization confirmed via shuffle (leakage) test
-
----
-
-## 🧠 Data Leakage Prevention
-
-To ensure robust evaluation:
-
-- Train/Test split performed before SMOTE
+- Train-test split performed before SMOTE
 - SMOTE applied only to training data
-- Test data remained untouched
-- Shuffle test performed to confirm absence of leakage
+- Test data kept untouched
+- Shuffle test performed to confirm model learning
+
+Shuffle test accuracy dropped to ~0.27, confirming the absence of data leakage.
 
 ---
 
-## 📁 Project Structure
-# 🌍 AQI Classification ML Project
+# Final Model Selection
 
-![Python](https://img.shields.io/badge/Python-3.10-blue)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange)
-![Streamlit](https://img.shields.io/badge/Deployed-Streamlit-success)
-![Status](https://img.shields.io/badge/Status-Production-brightgreen)
+Random Forest was selected as the final production model because it:
 
-A production-ready Machine Learning system that predicts Air Quality Index (AQI) levels using pollutant measurements and time-based features.  
-
-The final model is deployed publicly via Streamlit Cloud.
+- Achieved higher accuracy
+- Achieved higher Macro F1 score
+- Performed better on minority classes
+- Captured non-linear pollutant interactions effectively
 
 ---
 
-## 🚀 Live Application
+# Deployment
 
-🔗 **Streamlit Deployment:**  
-https://aqi-ml-project-wiqqndruisijceapaz5vpf.streamlit.app/
+The trained model was deployed using Streamlit Cloud.
 
-Users can input pollutant values and receive real-time AQI classification predictions powered by a trained Random Forest model.
+Deployment workflow:
 
----
-
-## 📊 Dataset
-
-- Source: OpenWeather Historical AQI API
-- Total Records: 2,760
-- Location: Colombo, Sri Lanka
-- Target Classes: AQI Levels 1–4
-
-### Features Used
-
-- pm2_5
-- pm10
-- co
-- no2
-- o3
-- so2
-- hour
-- day
-- month
-- day_of_week
+1. Model saved using joblib
+2. Streamlit UI created in app.py
+3. GitHub repository connected
+4. Streamlit Cloud automatically builds and deploys the application
 
 ---
 
-## ⚙️ Data Preprocessing Pipeline
-
-✔ Timestamp feature extraction (hour, day, month, weekday)  
-✔ Stratified Train/Test Split (80/20)  
-✔ SMOTE applied to balance training classes  
-✔ StandardScaler applied for Logistic Regression  
-✔ Strict separation to prevent data leakage  
-
----
-
-## 🤖 Models Trained
-
-1. Logistic Regression (Baseline Linear Model)
-2. Random Forest Classifier (Final Production Model)
-
----
-
-## 📈 Model Comparison
-
-### 📊 Performance Summary
-
-| Model                | Accuracy | Macro F1 Score |
-|----------------------|----------|----------------|
-| Logistic Regression  | 0.906    | 0.916          |
-| Random Forest        | 0.998    | 0.999          |
-
-Random Forest significantly outperformed Logistic Regression across all evaluation metrics and demonstrated stronger class-wise balance.
-
----
-
-## 🌲 Random Forest Feature Importance
-
-![Feature Importance](reports/feature_importance_rf.png)
-
-Top contributing pollutants:
-- PM2.5
-- PM10
-- O3
-
----
-
-## 📊 Accuracy Comparison
-
-![Accuracy](reports/accuracy_comparison.png)
-
----
-
-## 📊 Macro F1 Score Comparison
-
-![F1 Score](reports/f1_comparison.png)
-
----
-
-## 🔎 Confusion Matrices
-
-### Logistic Regression
-
-![Confusion Logistic](reports/confusion_matrix_logistic.png)
-
-### Random Forest
-
-![Confusion RF](reports/confusion_matrix_rf.png)
-
----
-
-## 📊 Class Distribution Analysis
-
-### Original Dataset (Imbalanced)
-
-![Original Distribution](reports/original_class_distribution.png)
-
-### Balanced Training Data (After SMOTE)
-
-![Balanced Distribution](reports/balanced_training_distribution.png)
-
----
-
-## 🏆 Final Model Selection Rationale
-
-Random Forest was selected as the production model because:
-
-- Higher overall accuracy
-- Higher macro F1 score (balanced performance across classes)
-- Better minority class recall
-- Captures non-linear pollutant interactions
-- Generalization validated using shuffle (leakage) test
-
----
-
-## 🧠 Data Leakage Prevention
-
-To ensure reliable evaluation:
-
-- Train/Test split performed before SMOTE
-- SMOTE applied only to training data
-- Test data remained untouched
-- Shuffle test confirmed no memorization
-
----
-
-## 🛠 Deployment
-
-- Model serialized using `joblib`
-- Interactive UI built with Streamlit
-- Hosted on Streamlit Cloud
-- Dependencies managed via `requirements.txt`
-- Version controlled using Git & GitHub
-
----
-
-## 📁 Project Structure
+# Project Structure
 
 ```
-aqi_ml_project/
+aqi_ml_project
 │
-├── data/
-├── models/
+├── data
+│   └── aqi_data.csv
+│
+├── models
 │   ├── logistic_model.pkl
 │   ├── random_forest_model.pkl
 │   └── scaler.pkl
 │
-├── reports/
+├── reports
 │   ├── accuracy_comparison.png
 │   ├── f1_comparison.png
 │   ├── confusion_matrix_logistic.png
 │   ├── confusion_matrix_rf.png
+│   ├── feature_importance_rf.png
 │   ├── original_class_distribution.png
 │   ├── balanced_training_distribution.png
-│   ├── feature_importance_rf.png
 │   └── model_performance.csv
 │
-├── src/
+├── src
 │   ├── ingestion.py
 │   ├── preprocessing.py
 │   ├── train.py
@@ -324,12 +223,13 @@ aqi_ml_project/
 │
 ├── app.py
 ├── requirements.txt
+├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 🧰 Tech Stack
+# Tech Stack
 
 - Python
 - Scikit-learn
@@ -339,30 +239,22 @@ aqi_ml_project/
 - Matplotlib
 - Seaborn
 - Streamlit
-- Git & GitHub
+- Git
+- GitHub
 
 ---
 
-## 📌 Key Learnings
+# Key Learnings
 
-- Handling imbalanced classification problems
+This project strengthened knowledge in:
+
+- Handling imbalanced classification datasets
 - Preventing data leakage in ML pipelines
 - Model comparison using macro evaluation metrics
-- Feature importance interpretation
+- Feature importance analysis
 - Building production-ready ML systems
-- Deploying ML applications to cloud platforms
+- Deploying ML applications using Streamlit Cloud
 
 ---
 
-## 🔮 Future Improvements
-
-- Add cross-validation
-- Hyperparameter tuning (GridSearchCV)
-- Add XGBoost comparison
-- Integrate live API inference
-- Dockerize the application
-- CI/CD pipeline for automated testing
-
----
-
-### ⭐ If you found this project interesting, consider starring the repository!
+If you found this project interesting, consider starring the repository.
